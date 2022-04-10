@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+
+import Card from "./components/Card/Card";
+import Grid from "./components/Grid/Grid";
+import Pagination from "./components/Pagination/Pagination";
+import './styles.scss';
+import data from "./digimon.json";
 
 function App() {
+  const [digimons, setDigimons] = useState(data.slice(0, 12));
+  const [page, setpage] = useState(12);
+
+  useEffect(() => {
+    setDigimons(data.slice(page - 12, page));
+  }, [page]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Grid>
+        {digimons.map(item => {
+          return (
+            <Card
+              key={item.url}
+              image={item?.image?.split("/revision")[0]}
+              title={item.title}
+            />
+          );
+        })}
+      </Grid>
+      <Pagination setPage={setpage}/>
+    </> 
   );
 }
 
